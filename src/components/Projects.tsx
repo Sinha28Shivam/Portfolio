@@ -21,6 +21,13 @@ const projects = [
     image: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=800&q=80",
     tech: ["Socket.io", "React", "Express"],
     link: "https://github.com/Sinha28Shivam/LeaveMangementSystem.git"
+  },
+  {
+    title: "To-Do List",
+    description: "Create a To-Do List using ReactJS and supabase",
+    image: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=800&q=80",
+    tech: ["Socket.io", "React", "Express"],
+    link: "https://incomparable-licorice-f2ddd8.netlify.app/"
   }
 ];
 
