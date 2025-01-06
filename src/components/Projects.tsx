@@ -16,11 +16,11 @@ const projects = [
     link: "https://github.com/Sinha28Shivam/NODEJS_practice.git"
   },
   {
-    title: "Project 3",
-    description: "Real-time chat application",
+    title: "Leave Management System",
+    description: "Leave Mangaement System created using JavaScript framework SAPUI5 and OData services",
     image: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=800&q=80",
     tech: ["Socket.io", "React", "Express"],
-    link: "#"
+    link: "https://github.com/Sinha28Shivam/LeaveMangementSystem.git"
   }
 ];
 
