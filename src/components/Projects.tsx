@@ -2,14 +2,14 @@ import { motion } from 'framer-motion';
 
 const projects = [
   {
-    title: "Project 1",
-    description: "A norma project created using HTML and CSS",
+    title: "URL Shortner",
+    description: "A normal project created using NodeJS and ExpressJS for backend and HTML5 and CSS3 for frontend using EJS as templating engine",
     image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80",
     tech: ["HTML5", "CSS3"],
-    link: "https://github.com/Sinha28Shivam/Proposal.git"
+    link: "https://github.com/Sinha28Shivam/Url_shortner.git"
   },
   {
-    title: "Project 2",
+    title: "NodeJS Backend",
     description: "A NodeJS backend server created using MongoDB and ExpressJS",
     image: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&fit=crop&w=800&q=80",
     tech: ["MongoDB", "NodeJS", "ExpressJS"],
