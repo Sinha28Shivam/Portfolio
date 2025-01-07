@@ -216,16 +216,7 @@ import { useEffect, useState } from 'react';
       {/* Projects Section */}
       <section id="projects" className="min-h-screen">
         <Projects />
-        <motion.button
-            onClick={() => scrollToNextSection('hero')}
-            className="absolute bottom-12 left-1/2 transform -translate-x-1/2 animate-bounce"
-            whileHover={{ scale: 1.1 }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
-            <ChevronDown className="w-8 h-8" />
-          </motion.button>
+       
       </section>
     </div>
   );
