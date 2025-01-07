@@ -3,8 +3,22 @@ import { motion } from 'framer-motion';
 import { Github, Linkedin, Mail, ChevronDown, Code, Globe, Database, Terminal } from 'lucide-react';
 import Scene from './components/Scene';
 import Projects from './components/Projects';
+import fetchCommitCount from './utils/fetchCommitCount';
+import { useEffect, useState } from 'react';
 
 function App() {
+  const [commitCount, setCommitCount] = useState(0);
+
+  useEffect(() => {
+    const username = 'Sinha28Shivam'; // Replace with your GitHub username
+    const token = "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"; // Optional: Use a GitHub personal access token if needed
+
+    fetchCommitCount(username, token)
+      .then((count) => setCommitCount(count))
+      .catch((error) => console.error('Error fetching commit count:', error));
+  }, []);
+
+
   const scrollToNextSection = (sectionId: string) => {
     const section = document.getElementById(sectionId);
     if (section) {
@@ -125,6 +139,7 @@ function App() {
                 <div>
                   <p><strong>Location:</strong> Lucknow, Uttar Prades, India</p>
                   <p><strong>Experience:</strong> 2+ years</p>
+                  <p><strong>GitHub Commits:</strong> {commitCount}</p> {/* Display commit count */}
                 </div>
               </div>
             </div>
