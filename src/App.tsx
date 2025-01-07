@@ -3,10 +3,13 @@ import { motion } from 'framer-motion';
 import { Github, Linkedin, Mail, ChevronDown, Code, Globe, Database, Terminal } from 'lucide-react';
 import Scene from './components/Scene';
 import Projects from './components/Projects';
-import fetchCommitCount from './utils/fetchCommitCount';
-import { useEffect, useState } from 'react';
+
 
 function App() {
+  /* this will not working as of now because of the CORS policy
+
+  import fetchCommitCount from './utils/fetchCommitCount';
+import { useEffect, useState } from 'react';
   const [commitCount, setCommitCount] = useState(0);
 
   useEffect(() => {
@@ -17,6 +20,7 @@ function App() {
       .then((count) => setCommitCount(count))
       .catch((error) => console.error('Error fetching commit count:', error));
   }, []);
+  */
 
 
   const scrollToNextSection = (sectionId: string) => {
@@ -83,12 +87,12 @@ function App() {
             </a>
           </motion.div>
           <motion.button
-  onClick={() => scrollToNextSection('about')}
-  className="absolute bottom-12 left-1/2 transform -translate-x-1/2 animate-bounce"
-  whileHover={{ scale: 1.1 }}
->
-  <ChevronDown className="w-8 h-8" />
-</motion.button>
+            onClick={() => scrollToNextSection('about')}
+            className="absolute bottom-12 left-1/2 transform -translate-x-1/2 animate-bounce"
+            whileHover={{ scale: 1.1 }}
+          >
+            <ChevronDown className="w-8 h-8" />
+          </motion.button>
 
 
         </div>
@@ -139,7 +143,7 @@ function App() {
                 <div>
                   <p><strong>Location:</strong> Lucknow, Uttar Prades, India</p>
                   <p><strong>Experience:</strong> 2+ years</p>
-                  <p><strong>GitHub Commits:</strong> {commitCount}</p> {/* Display commit count */}
+                  {/* <p><strong>GitHub Commits:</strong> {commitCount}</p> Display commit count */}
                 </div>
               </div>
             </div>
@@ -194,14 +198,18 @@ function App() {
               ))}
             </div>
           </motion.div>
+          <motion.button
+            onClick={() => scrollToNextSection('projects')}
+            className="absolute bottom-12 left-1/2 transform -translate-x-1/2 animate-bounce"
+            whileHover={{ scale: 1.1 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            <ChevronDown className="w-8 h-8" />
+          </motion.button>
         </div>
-        <motion.button
-  onClick={() => scrollToNextSection('projects')}
-  className="absolute bottom-12 left-1/2 transform -translate-x-1/2 animate-bounce"
-  whileHover={{ scale: 1.1 }}
->
-  <ChevronDown className="w-8 h-8" />
-</motion.button>
+
 
       </section>
 
@@ -209,12 +217,15 @@ function App() {
       <section id="projects" className="min-h-screen">
         <Projects />
         <motion.button
-          onClick={() => scrollToNextSection('hero')}
-          className="absolute bottom-12 left-1/2 transform -translate-x-1/2 animate-bounce"
-          whileHover={{ scale: 1.1 }}
-        >
-          <ChevronDown className="w-8 h-8 rotate-180" />
-        </motion.button>
+            onClick={() => scrollToNextSection('hero')}
+            className="absolute bottom-12 left-1/2 transform -translate-x-1/2 animate-bounce"
+            whileHover={{ scale: 1.1 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            <ChevronDown className="w-8 h-8" />
+          </motion.button>
       </section>
     </div>
   );
