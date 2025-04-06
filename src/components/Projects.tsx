@@ -28,6 +28,13 @@ const projects = [
     image: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=800&q=80",
     tech: ["Supabase Database", "React", "NextJS"],
     link: "https://incomparable-licorice-f2ddd8.netlify.app/"
+  },
+  {
+    title: "Real Time Chat App",
+    description: "This is a real time chat app created using ReactJS and nodeJS",
+    image: "../assets/ChatSentinel.png",
+    tech: ["NodeJS", "ReactJS", "Socket.io", "ExpressJS", "MongoDB"],
+    link: "https://chatsentinal.onrender.com"
   }
 ];
 
