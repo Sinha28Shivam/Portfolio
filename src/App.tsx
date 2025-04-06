@@ -123,18 +123,33 @@ import { useEffect, useState } from 'react';
           >
             <div className="md:w-1/3">
               <img
-                src="https://media.licdn.com/dms/image/v2/D5603AQEln8BouSwUSw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1728314083956?e=1741824000&v=beta&t=-OsMQsOkpHNpaYj0NsHsg59jPURGZYlic4a9Vi8j0fM"
-                alt="Profile"
-                className="rounded-2xl shadow-2xl w-full"
+                src="./assets/myIMage.jpeg"
+                className="rounded-2xl shadow-2xl w-full h-auto"
               />
             </div>
             <div className="md:w-2/3">
               <h3 className="text-2xl font-bold mb-4">Who am I?</h3>
-              <p className="text-lg text-gray-300 mb-6">
-                I'm a passionate developer with expertise in building modern web applications.
+              <p className="text-gray-300 mb-6">
+                I'm a passionate developer and Tester with expertise in building and testing modern web applications.
                 With a strong foundation in both front-end and back-end development,
                 I create seamless user experiences that bring ideas to life.
               </p>
+              <p>
+              ➤ Current Role: Automation testing, ensuring efficient and accurate test execution.<br />
+
+              ➤ Current Focus: Learning Node.js, JavaScript, MongoDB, and Express.js.<br /><br />
+
+              ➤ Technical Skills:<br />
+
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;❖ Backend & Development: Node.js, JavaScript, MongoDB, Express.js.<br />
+
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;❖ Testing: Learning Python and its related frameworks.<br /><br />
+
+
+              ➤ Past Experience: Cybersecurity and penetration testing, securing digital infrastructures.<br /><br />
+
+              ➤ Future Goal: Becoming a result-driven developer by integrating automation, security, and development expertise.<br />
+              </p><br />
               <div className="grid grid-cols-2 gap-4 text-gray-300">
                 <div>
                   <p><strong>Name:</strong> Shivam Sinha</p>
@@ -144,6 +159,14 @@ import { useEffect, useState } from 'react';
                   <p><strong>Location:</strong> Lucknow, Uttar Prades, India</p>
                   <p><strong>Experience:</strong> 2+ years</p>
                   {/* <p><strong>GitHub Commits:</strong> {commitCount}</p> Display commit count */}
+                </div>
+              </div>
+              <div className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl">
+                <h3 className="text-xl font-semibold mb-4">Education</h3>
+                <div className="space-y-2 text-gray-300">
+                  <p><strong>Degree:</strong> B.Sc(Computing & Design)</p>
+                  <p><strong>University:</strong> Birla Institute Of Technology, Pilani, Rajasthan</p>
+                  <p><strong>Year:</strong> 2027</p>
                 </div>
               </div>
             </div>
