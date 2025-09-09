@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Github, Linkedin, Mail, ChevronDown, Code, Globe, Database, Terminal } from 'lucide-react';
 import Scene from './components/Scene';
 import Projects from './components/Projects';
+import myImage from '../assets/MyIMage.jpeg';
 
 
 function App() {
@@ -123,8 +124,9 @@ import { useEffect, useState } from 'react';
           >
             <div className="md:w-1/3">
               <img
-                src="./assets/myIMage.jpeg"
+                src={myImage}
                 className="rounded-2xl shadow-2xl w-full h-auto"
+                alt="Shivam Sinha profile"
               />
             </div>
             <div className="md:w-2/3">
