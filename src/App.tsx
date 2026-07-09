@@ -15,8 +15,13 @@ import {
   Workflow,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import Scene from './components/Scene';
 import Projects from './components/Projects';
+import BootLoader from './components/BootLoader';
+import CommandPalette from './components/CommandPalette';
+import CustomCursor from './components/CustomCursor';
+import DecryptText from './components/DecryptText';
 import myImage from '../assets/MyIMage.jpeg';
 
 const navigation = [
@@ -136,6 +141,7 @@ const contactLinks = [
 function App() {
   const [activeMode, setActiveMode] = useState(focusModes[0].id);
   const [indiaTime, setIndiaTime] = useState('');
+  const [booted, setBooted] = useState(false);
 
   useEffect(() => {
     const updateTime = () => {
@@ -158,6 +164,12 @@ function App() {
 
   return (
     <div className="app-shell">
+      <AnimatePresence>
+        {!booted && <BootLoader onComplete={() => setBooted(true)} />}
+      </AnimatePresence>
+      <CustomCursor />
+      <CommandPalette />
+
       <div className="scene-shell" aria-hidden="true">
         <Canvas camera={{ position: [0, 0, 7], fov: 48 }}>
           <Scene />
@@ -180,6 +192,13 @@ function App() {
               {item.label}
             </a>
           ))}
+          <button
+            type="button"
+            className="terminal-hint"
+            onClick={() => window.dispatchEvent(new Event('open-terminal'))}
+          >
+            &gt;_ terminal
+          </button>
         </nav>
       </header>
 
@@ -202,7 +221,7 @@ function App() {
               transition={{ duration: 0.8, delay: 0.1 }}
               className="hero-title"
             >
-              I build digital experiences like a control room, not a brochure.
+              <DecryptText text="I build digital experiences like a control room, not a brochure." />
             </motion.h1>
 
             <motion.p
