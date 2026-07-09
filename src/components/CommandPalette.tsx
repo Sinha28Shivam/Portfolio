@@ -1,7 +1,11 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { getGitHubPulse } from '../live/github';
+import { formatIss, getIssPosition } from '../live/iss';
+import { getVisitorRecon } from '../live/recon';
 
 type Entry = {
+  id: number;
   cmd: string;
   output: string[];
 };
@@ -12,7 +16,10 @@ const BANNER = [
   'SHIVAM.SYS interactive shell — type `help` to list commands.',
 ];
 
-function runCommand(raw: string): { output: string[]; action?: 'clear' | 'exit' } {
+function runCommand(raw: string): {
+  output: string[] | Promise<string[]>;
+  action?: 'clear' | 'exit';
+} {
   const input = raw.trim().toLowerCase();
 
   switch (input) {
@@ -27,6 +34,9 @@ function runCommand(raw: string): { output: string[]; action?: 'clear' | 'exit' 
           '  projects        list the project archive',
           '  goto <section>  jump to a section (hero, trajectory, focus, projects, contact)',
           '  contact         open channels',
+          '  scan            passive recon on YOUR device (live)',
+          '  github          live github activity feed',
+          '  iss             live ISS position right now',
           '  time            local time in Lucknow (IST)',
           '  sudo hire-me    escalate privileges',
           '  clear           wipe the buffer',
@@ -75,6 +85,35 @@ function runCommand(raw: string): { output: string[]; action?: 'clear' | 'exit' 
           'email     sinha28.shivam@gmail.com',
         ],
       };
+    case 'scan':
+      return { output: getVisitorRecon().then((recon) => recon.lines) };
+    case 'github':
+      return {
+        output: getGitHubPulse().then((pulse) =>
+          pulse
+            ? [
+                `live from api.github.com — Sinha28Shivam`,
+                `last push    ${pulse.lastPushAgo ?? 'n/a'}${pulse.lastPushRepo ? ` → ${pulse.lastPushRepo}` : ''}`,
+                `repos        ${pulse.publicRepos} public`,
+                `followers    ${pulse.followers}`,
+                `recent work  ${pulse.recentCommits} commits across ${pulse.activeRepos.join(', ') || '—'}`,
+              ]
+            : ['signal lost — github api unreachable from this network.'],
+        ),
+      };
+    case 'iss':
+      return {
+        output: getIssPosition().then((pos) =>
+          pos
+            ? [
+                'international space station — live fix:',
+                `position     ${formatIss(pos)}`,
+                `altitude     ${Math.round(pos.altitudeKm)} km above earth`,
+                'source: api.wheretheiss.at (NORAD 25544)',
+              ]
+            : ['signal lost — tracking api unreachable.'],
+        ),
+      };
     case 'time':
       return {
         output: [
@@ -122,6 +161,7 @@ function CommandPalette() {
   const [history, setHistory] = useState<Entry[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
+  const entryIdRef = useRef(0);
 
   const toggle = useCallback(() => setOpen((prev) => !prev), []);
 
@@ -157,7 +197,17 @@ function CommandPalette() {
     if (action === 'clear') {
       setHistory([]);
     } else if (value.trim()) {
-      setHistory((prev) => [...prev, { cmd: value, output }]);
+      const id = ++entryIdRef.current;
+      if (output instanceof Promise) {
+        setHistory((prev) => [...prev, { id, cmd: value, output: ['[ querying live feed... ]'] }]);
+        output.then((lines) => {
+          setHistory((prev) =>
+            prev.map((entry) => (entry.id === id ? { ...entry, output: lines } : entry)),
+          );
+        });
+      } else {
+        setHistory((prev) => [...prev, { id, cmd: value, output }]);
+      }
     }
     setValue('');
     if (action === 'exit') setOpen(false);
@@ -200,13 +250,13 @@ function CommandPalette() {
                 {BANNER.map((line) => (
                   <p key={line} className="cmdk-banner">{line}</p>
                 ))}
-                {history.map((entry, i) => (
-                  <div key={`${entry.cmd}-${i}`} className="cmdk-entry">
+                {history.map((entry) => (
+                  <div key={entry.id} className="cmdk-entry">
                     <p>
                       <span className="cmdk-prompt">visitor@shivam:~$</span> {entry.cmd}
                     </p>
                     {entry.output.map((line, j) => (
-                      <p key={j} className="cmdk-output">{line}</p>
+                      <p key={j} className="cmdk-output">{line || ' '}</p>
                     ))}
                   </div>
                 ))}

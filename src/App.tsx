@@ -22,6 +22,9 @@ import BootLoader from './components/BootLoader';
 import CommandPalette from './components/CommandPalette';
 import CustomCursor from './components/CustomCursor';
 import DecryptText from './components/DecryptText';
+import EngineHud from './components/EngineHud';
+import { getGitHubPulse, type GitHubPulse } from './live/github';
+import { formatIss, subscribeIss, type IssPosition } from './live/iss';
 import myImage from '../assets/MyIMage.jpeg';
 
 const navigation = [
@@ -142,6 +145,13 @@ function App() {
   const [activeMode, setActiveMode] = useState(focusModes[0].id);
   const [indiaTime, setIndiaTime] = useState('');
   const [booted, setBooted] = useState(false);
+  const [pulse, setPulse] = useState<GitHubPulse | null>(null);
+  const [iss, setIss] = useState<IssPosition | null>(null);
+
+  useEffect(() => {
+    getGitHubPulse().then(setPulse);
+    return subscribeIss(setIss);
+  }, []);
 
   useEffect(() => {
     const updateTime = () => {
@@ -169,6 +179,7 @@ function App() {
       </AnimatePresence>
       <CustomCursor />
       <CommandPalette />
+      <EngineHud />
 
       <div className="scene-shell" aria-hidden="true">
         <Canvas camera={{ position: [0, 0, 7], fov: 48 }}>
@@ -311,6 +322,37 @@ function App() {
                 </div>
               ))}
             </div>
+
+            {(pulse || iss) && (
+              <div className="live-block">
+                <p className="mini-label">
+                  <span className="live-dot" /> Live telemetry
+                </p>
+                {pulse?.lastPushAgo && pulse.lastPushRepo && (
+                  <div className="live-row">
+                    <span>last commit</span>
+                    <strong>
+                      {pulse.lastPushAgo} → {pulse.lastPushRepo}
+                    </strong>
+                  </div>
+                )}
+                {pulse && (
+                  <div className="live-row">
+                    <span>github</span>
+                    <strong>
+                      {pulse.publicRepos} repos · {pulse.followers} followers ·{' '}
+                      {pulse.recentCommits} recent commits
+                    </strong>
+                  </div>
+                )}
+                {iss && (
+                  <div className="live-row">
+                    <span>iss overhead</span>
+                    <strong>{formatIss(iss)}</strong>
+                  </div>
+                )}
+              </div>
+            )}
 
             <div className="contact-row">
               {contactLinks.map((item) => {

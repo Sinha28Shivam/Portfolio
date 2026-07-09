@@ -59,6 +59,7 @@ function buildColors(count: number) {
 function Scene() {
   const groupRef = useRef<THREE.Group>(null);
   const pointsRef = useRef<THREE.Points>(null);
+  const telemetryRef = useRef({ frames: 0, lastEmit: 0 });
 
   const { shapes, positions, colors } = useMemo(() => {
     const built = buildShapes(COUNT);
@@ -94,6 +95,26 @@ function Scene() {
     points.rotation.y += 0.0012;
     group.rotation.x += (state.pointer.y * 0.22 - group.rotation.x) * 0.04;
     group.rotation.z += (state.pointer.x * -0.12 - group.rotation.z) * 0.04;
+
+    // Emit real render stats every 500ms for the EngineHud readout.
+    const telemetry = telemetryRef.current;
+    telemetry.frames += 1;
+    const now = state.clock.elapsedTime;
+    if (telemetry.lastEmit === 0) telemetry.lastEmit = now;
+    const elapsed = now - telemetry.lastEmit;
+    if (elapsed >= 0.5) {
+      window.dispatchEvent(
+        new CustomEvent('engine-telemetry', {
+          detail: {
+            fps: Math.round(telemetry.frames / elapsed),
+            points: COUNT,
+            drawCalls: state.gl.info.render.calls,
+          },
+        }),
+      );
+      telemetry.frames = 0;
+      telemetry.lastEmit = now;
+    }
   });
 
   return (
