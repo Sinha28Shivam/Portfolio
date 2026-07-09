@@ -39,26 +39,31 @@ function runCommand(raw: string): { output: string[]; action?: 'clear' | 'exit' 
           'shivam sinha — full stack developer & automation tester',
           'base: lucknow, uttar pradesh, india',
           'history: cybersecurity & penetration testing',
+          'current focus: generative & agentic ai — llm-driven testing systems',
           'trajectory: node.js, express, mongodb, product engineering',
         ],
       };
     case 'skills':
       return {
         output: [
+          '[ai]        agentic systems · gpt-4o · gemini · llm-as-judge · vision agents',
           '[frontend]  react · typescript · tailwind · framer-motion · three.js',
-          '[backend]   node.js · express · mongodb',
-          '[quality]   automation testing · python (learning)',
+          '[backend]   node.js · express · mongodb · redis · docker',
+          '[quality]   automation testing · playwright · appium · python',
           '[security]  pentesting background · threat modelling instinct',
         ],
       };
     case 'projects':
       return {
         output: [
-          '01  url shortener        node · express · ejs',
-          '02  nodejs backend       mongodb · express',
-          '03  leave management     sapui5 · odata',
-          '04  to-do list           react · supabase',
-          '05  chatsentinel         react · socket.io · realtime',
+          '01  netflix agentic game tester   gpt-4o · appium · vision agent',
+          '02  ai saas api testing platform  gemini · react 19 · redis · docker',
+          '03  validation poc                playwright · llm judge · python',
+          '04  url shortener                 node · express · ejs',
+          '05  nodejs backend                mongodb · express',
+          '06  leave management              sapui5 · odata',
+          '07  to-do list                    react · supabase',
+          '08  chatsentinel                  react · socket.io · realtime',
           'hint: `goto projects` to view the archive.',
         ],
       };

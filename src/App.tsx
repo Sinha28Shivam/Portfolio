@@ -49,17 +49,17 @@ const signalCards = [
 
 const missionStats = [
   { label: 'Core vector', value: 'Full stack + QA' },
-  { label: 'Current orbit', value: 'Automation engineering' },
-  { label: 'Expansion path', value: 'Node.js, Express, MongoDB' },
+  { label: 'Current orbit', value: 'Generative & agentic AI' },
+  { label: 'Expansion path', value: 'LLM-driven testing systems' },
   { label: 'Field history', value: 'Cybersecurity and testing' },
 ];
 
 const trajectory = [
   {
     year: 'Now',
-    title: 'Automation-first execution',
+    title: 'Agentic AI automation',
     description:
-      'Designing reliable test flows and using systems thinking to keep releases stable under pressure.',
+      'Building LLM-driven agents that test real products — vision agents playing mobile games, AI judges validating content, and platforms that generate their own test cases.',
   },
   {
     year: 'Next',
@@ -230,9 +230,10 @@ function App() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="hero-description"
             >
-              Full stack developer, automation engineer, and security-minded problem solver based in
-              India. I care about interfaces with presence, systems with resilience, and execution
-              that feels intentional all the way through.
+              Full stack developer and automation engineer building with generative and agentic
+              AI — LLM agents that play games, judge content, and test APIs. I care about
+              interfaces with presence, systems with resilience, and execution that feels
+              intentional all the way through.
             </motion.p>
 
             <motion.div

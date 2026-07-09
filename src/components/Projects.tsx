@@ -3,7 +3,43 @@ import { ArrowUpRight } from 'lucide-react';
 import type { MouseEvent } from 'react';
 import chatSentinelImage from '../../assets/ChatSentinel.png';
 
-const projects = [
+type Project = {
+  title: string;
+  description: string;
+  image: string;
+  tech: string[];
+  link: string;
+  featured?: boolean;
+};
+
+const projects: Project[] = [
+  {
+    title: 'Netflix Agentic Game Tester',
+    description:
+      'Vision-driven AI agent that plays and tests Netflix mobile games (Bloons TD 6, Farming Simulator, Into the Breach) on real Android devices — a GPT-4o reasoning loop reads screenshots, routes between models, and drives Appium tool calls, emitting structured test reports.',
+    image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80',
+    tech: ['Agentic AI', 'GPT-4o', 'Python', 'Appium', 'Vision'],
+    link: 'https://github.com/Sinha28Shivam/Netflix-Farming-simulator-Agentic-Automation',
+    featured: true,
+  },
+  {
+    title: 'AI-Powered SaaS API Testing Platform',
+    description:
+      'Full-stack SaaS where Gemini generates intelligent test cases and edge cases for any API — React 19 dashboard with live analytics, Express backend, Redis + BullMQ job queues for high-volume async runs, JWT auth, Prisma/PostgreSQL + MongoDB, fully Dockerized behind Nginx.',
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
+    tech: ['Google Gemini', 'React 19', 'Node.js', 'Redis', 'Docker'],
+    link: 'https://github.com/Sinha28Shivam/AI-Powered-SaaS-API-Testing-Platform',
+    featured: true,
+  },
+  {
+    title: 'Validation POC — AI Web Validator',
+    description:
+      'Hybrid validation pipeline that captures pages with Playwright, runs deterministic checks for soft-404s, thin content and bad redirects, then escalates ambiguous pages to an LLM for semantic review — producing PASS / FAIL / UNCERTAIN reports.',
+    image: 'https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=800&q=80',
+    tech: ['LLM Judge', 'Playwright', 'Python', 'Azure OpenAI'],
+    link: 'https://github.com/Sinha28Shivam/Validation_POC',
+    featured: true,
+  },
   {
     title: 'URL Shortener',
     description:
@@ -66,14 +102,17 @@ function Projects() {
       <div className="section-heading">
         <p className="section-kicker">Project archive</p>
         <h2>Deployed experiments and shipped systems.</h2>
-        <p>Each card is live telemetry from something I actually built — hover to inspect.</p>
+        <p>
+          Each card is live telemetry from something I actually built — hover to inspect. The
+          latest batch: autonomous agents and LLM-powered testing systems.
+        </p>
       </div>
 
       <div className="projects-grid">
         {projects.map((project, index) => (
           <motion.article
             key={project.title}
-            className="project-card"
+            className={project.featured ? 'project-card project-card--featured' : 'project-card'}
             initial={{ opacity: 0, y: 28 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.25 }}
@@ -85,6 +124,7 @@ function Projects() {
             <div className="project-card__media">
               <img src={project.image} alt={project.title} loading="lazy" />
               <span className="project-card__index">{String(index + 1).padStart(2, '0')}</span>
+              {project.featured && <span className="project-card__flag">AI / Agentic</span>}
             </div>
             <div className="project-card__body">
               <h3>{project.title}</h3>

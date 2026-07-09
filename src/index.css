@@ -786,6 +786,30 @@ main {
   opacity: 1;
 }
 
+.project-card--featured {
+  border-color: rgba(167, 139, 250, 0.4);
+  box-shadow: 0 0 28px rgba(167, 139, 250, 0.1);
+}
+
+.project-card--featured:hover {
+  border-color: rgba(167, 139, 250, 0.65);
+}
+
+.project-card__flag {
+  position: absolute;
+  top: 0.8rem;
+  left: 0.9rem;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #04101a;
+  background: linear-gradient(120deg, var(--cyan), var(--violet));
+  border-radius: 8px;
+  padding: 0.3rem 0.6rem;
+  font-weight: 700;
+}
+
 .project-card__media {
   position: relative;
   height: 11rem;
