@@ -567,6 +567,83 @@ main {
   overflow-wrap: anywhere;
 }
 
+/* live ISS ground-track mini map */
+.iss-map {
+  position: relative;
+  margin-top: 0.2rem;
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(3, 4, 8, 0.6);
+}
+
+.iss-map svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.iss-map__grid {
+  stroke: rgba(148, 163, 184, 0.1);
+  stroke-width: 0.5;
+}
+
+.iss-map__equator {
+  stroke: rgba(34, 211, 238, 0.22);
+  stroke-width: 0.6;
+  stroke-dasharray: 4 4;
+}
+
+.iss-map__land {
+  fill: rgba(148, 163, 184, 0.13);
+  stroke: rgba(148, 163, 184, 0.3);
+  stroke-width: 0.6;
+}
+
+.iss-map__trail {
+  fill: var(--cyan);
+}
+
+.iss-map__sat--smooth {
+  transition: transform 4.5s linear;
+}
+
+.iss-map__dot {
+  fill: var(--cyan);
+  filter: drop-shadow(0 0 4px rgba(34, 211, 238, 0.9));
+}
+
+.iss-map__ping {
+  fill: none;
+  stroke: rgba(34, 211, 238, 0.7);
+  stroke-width: 0.8;
+  animation: iss-ping 2.4s ease-out infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+@keyframes iss-ping {
+  0% {
+    transform: scale(0.25);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+.iss-map__caption {
+  position: absolute;
+  bottom: 0.35rem;
+  right: 0.55rem;
+  font-family: var(--mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(154, 163, 184, 0.75);
+}
+
 .contact-row {
   display: flex;
   gap: 0.6rem;

@@ -23,6 +23,7 @@ import CommandPalette from './components/CommandPalette';
 import CustomCursor from './components/CustomCursor';
 import DecryptText from './components/DecryptText';
 import EngineHud from './components/EngineHud';
+import IssTracker from './components/IssTracker';
 import { getGitHubPulse, type GitHubPulse } from './live/github';
 import { formatIss, subscribeIss, type IssPosition } from './live/iss';
 import myImage from '../assets/MyIMage.jpeg';
@@ -351,6 +352,7 @@ function App() {
                     <strong>{formatIss(iss)}</strong>
                   </div>
                 )}
+                <IssTracker position={iss} />
               </div>
             )}
 
