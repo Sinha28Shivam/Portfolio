@@ -1,22 +1,27 @@
 import { useEffect, useRef, useState } from 'react';
 
-// Glowing dot + trailing ring cursor; the ring lerps behind the pointer and
-// swells over interactive elements. Renders nothing on touch-only devices.
+// Targeting-reticle cursor: a center dot rides the pointer, a rotating dashed
+// ring with corner brackets lerps behind it and "locks on" over interactive
+// elements, and a mono x:y coordinate readout trails alongside — HUD style.
+// Uses any-pointer (not primary-pointer) detection so touchscreen laptops
+// with a mouse attached still get the cursor.
 function CustomCursor() {
   const dotRef = useRef<HTMLDivElement>(null);
-  const ringRef = useRef<HTMLDivElement>(null);
+  const reticleRef = useRef<HTMLDivElement>(null);
+  const coordsRef = useRef<HTMLSpanElement>(null);
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
-    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-    setEnabled(true);
+    if (window.matchMedia('(any-hover: hover) and (any-pointer: fine)').matches) {
+      setEnabled(true);
+    }
   }, []);
 
   useEffect(() => {
     if (!enabled) return;
 
     const target = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-    const ring = { x: target.x, y: target.y };
+    const trail = { x: target.x, y: target.y };
     let raf = 0;
     let visible = false;
 
@@ -25,23 +30,26 @@ function CustomCursor() {
       target.y = event.clientY;
       if (!visible) {
         visible = true;
-        dotRef.current?.style.setProperty('opacity', '1');
-        ringRef.current?.style.setProperty('opacity', '1');
+        dotRef.current?.classList.add('is-visible');
+        reticleRef.current?.classList.add('is-visible');
       }
       const interactive = (event.target as Element | null)?.closest(
         'a, button, input, [role="button"], [role="tab"]',
       );
-      ringRef.current?.classList.toggle('cursor-ring--active', Boolean(interactive));
+      reticleRef.current?.classList.toggle('is-locked', Boolean(interactive));
     };
 
     const tick = () => {
-      ring.x += (target.x - ring.x) * 0.16;
-      ring.y += (target.y - ring.y) * 0.16;
+      trail.x += (target.x - trail.x) * 0.18;
+      trail.y += (target.y - trail.y) * 0.18;
       if (dotRef.current) {
         dotRef.current.style.transform = `translate3d(${target.x}px, ${target.y}px, 0)`;
       }
-      if (ringRef.current) {
-        ringRef.current.style.transform = `translate3d(${ring.x}px, ${ring.y}px, 0)`;
+      if (reticleRef.current) {
+        reticleRef.current.style.transform = `translate3d(${trail.x}px, ${trail.y}px, 0)`;
+      }
+      if (coordsRef.current) {
+        coordsRef.current.textContent = `${Math.round(target.x)} : ${Math.round(target.y)}`;
       }
       raf = requestAnimationFrame(tick);
     };
@@ -58,8 +66,16 @@ function CustomCursor() {
 
   return (
     <>
-      <div ref={dotRef} className="cursor-dot" aria-hidden="true" />
-      <div ref={ringRef} className="cursor-ring" aria-hidden="true" />
+      <div ref={dotRef} className="cursor-core" aria-hidden="true">
+        <span ref={coordsRef} className="cursor-coords" />
+      </div>
+      <div ref={reticleRef} className="cursor-reticle" aria-hidden="true">
+        <span className="reticle-ring" />
+        <span className="reticle-corner reticle-corner--tl" />
+        <span className="reticle-corner reticle-corner--tr" />
+        <span className="reticle-corner reticle-corner--bl" />
+        <span className="reticle-corner reticle-corner--br" />
+      </div>
     </>
   );
 }

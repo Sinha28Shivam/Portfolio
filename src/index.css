@@ -48,7 +48,7 @@ body {
   border-radius: 99px;
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (any-hover: hover) and (any-pointer: fine) {
   body {
     cursor: none;
   }
@@ -1159,40 +1159,129 @@ main {
   caret-color: var(--cyan);
 }
 
-/* ---------- custom cursor ---------- */
+/* ---------- targeting-reticle cursor ---------- */
 
-.cursor-dot,
-.cursor-ring {
+.cursor-core,
+.cursor-reticle {
   position: fixed;
   top: 0;
   left: 0;
   z-index: 200;
   pointer-events: none;
-  border-radius: 50%;
   opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
-.cursor-dot {
-  width: 7px;
-  height: 7px;
-  margin: -3.5px 0 0 -3.5px;
+.cursor-core.is-visible,
+.cursor-reticle.is-visible {
+  opacity: 1;
+}
+
+.cursor-core {
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  border-radius: 50%;
   background: var(--cyan);
-  box-shadow: 0 0 10px var(--glow);
+  box-shadow: 0 0 12px var(--glow);
 }
 
-.cursor-ring {
-  width: 34px;
-  height: 34px;
-  margin: -17px 0 0 -17px;
-  border: 1.5px solid rgba(34, 211, 238, 0.55);
-  transition: width 0.2s ease, height 0.2s ease, margin 0.2s ease, border-color 0.2s ease;
+.cursor-coords {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  color: rgba(34, 211, 238, 0.75);
+  white-space: nowrap;
+  text-shadow: 0 0 8px rgba(5, 6, 10, 0.9);
 }
 
-.cursor-ring--active {
-  width: 52px;
-  height: 52px;
-  margin: -26px 0 0 -26px;
-  border-color: rgba(167, 139, 250, 0.8);
+.cursor-reticle {
+  width: 44px;
+  height: 44px;
+  margin: -22px 0 0 -22px;
+}
+
+.reticle-ring {
+  position: absolute;
+  inset: 6px;
+  border: 1px dashed rgba(34, 211, 238, 0.6);
+  border-radius: 50%;
+  animation: reticle-spin 6s linear infinite;
+}
+
+@keyframes reticle-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.reticle-corner {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-color: rgba(34, 211, 238, 0.9);
+  border-style: solid;
+  border-width: 0;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.reticle-corner--tl {
+  top: 0;
+  left: 0;
+  border-top-width: 1.5px;
+  border-left-width: 1.5px;
+}
+
+.reticle-corner--tr {
+  top: 0;
+  right: 0;
+  border-top-width: 1.5px;
+  border-right-width: 1.5px;
+}
+
+.reticle-corner--bl {
+  bottom: 0;
+  left: 0;
+  border-bottom-width: 1.5px;
+  border-left-width: 1.5px;
+}
+
+.reticle-corner--br {
+  bottom: 0;
+  right: 0;
+  border-bottom-width: 1.5px;
+  border-right-width: 1.5px;
+}
+
+/* lock-on state over links, buttons, inputs */
+.cursor-reticle.is-locked .reticle-ring {
+  border-style: solid;
+  border-color: rgba(167, 139, 250, 0.85);
+  animation-play-state: paused;
+  box-shadow: 0 0 18px rgba(167, 139, 250, 0.35);
+}
+
+.cursor-reticle.is-locked .reticle-corner {
+  border-color: rgba(167, 139, 250, 1);
+}
+
+.cursor-reticle.is-locked .reticle-corner--tl {
+  transform: translate(-5px, -5px);
+}
+
+.cursor-reticle.is-locked .reticle-corner--tr {
+  transform: translate(5px, -5px);
+}
+
+.cursor-reticle.is-locked .reticle-corner--bl {
+  transform: translate(-5px, 5px);
+}
+
+.cursor-reticle.is-locked .reticle-corner--br {
+  transform: translate(5px, 5px);
 }
 
 /* ---------- responsive ---------- */
