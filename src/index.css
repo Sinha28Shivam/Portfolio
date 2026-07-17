@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --bg: #05060a;
-  --bg-soft: rgba(13, 16, 28, 0.72);
+  --bg: #020617; /* darker */
+  --bg-soft: rgba(15, 23, 42, 0.6); /* panel */
   --line: rgba(148, 163, 184, 0.16);
   --line-strong: rgba(148, 163, 184, 0.3);
   --text: #e6e9f2;
@@ -13,6 +13,32 @@
   --violet: #a78bfa;
   --glow: rgba(34, 211, 238, 0.35);
   --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-panel backdrop-blur-xl border border-white/10 shadow-glow rounded-xl;
+  }
+  .glow-border {
+    position: relative;
+  }
+  .glow-border::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(45deg, var(--cyan), var(--violet));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .glow-border:hover::before {
+    opacity: 1;
+  }
 }
 
 * {
@@ -1495,5 +1521,101 @@ main {
   *::after {
     animation-duration: 0.001s !important;
     transition-duration: 0.001s !important;
+  }
+}
+
+/* ---------- Expandable Project Modal ---------- */
+
+.project-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(2, 6, 23, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.project-modal {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 20px;
+  background: var(--bg);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+}
+
+.project-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  cursor: pointer;
+  z-index: 10;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.project-modal-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
+}
+
+.project-modal__media {
+  width: 100%;
+  height: 350px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px 20px 0 0;
+}
+
+.project-modal__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.project-modal__content {
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.project-modal__content h2 {
+  font-size: 2.5rem;
+  margin: 0;
+  color: var(--text);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+@media (max-width: 768px) {
+  .project-modal-overlay {
+    padding: 1rem;
+  }
+  .project-modal__media {
+    height: 250px;
+  }
+  .project-modal__content {
+    padding: 1.5rem;
+  }
+  .project-modal__content h2 {
+    font-size: 2rem;
   }
 }
