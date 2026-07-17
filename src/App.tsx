@@ -24,6 +24,7 @@ import CustomCursor from './components/CustomCursor';
 import DecryptText from './components/DecryptText';
 import EngineHud from './components/EngineHud';
 import IssTracker from './components/IssTracker';
+import TechStack from './components/TechStack';
 import { getGitHubPulse, type GitHubPulse } from './live/github';
 import { formatIss, subscribeIss, type IssPosition } from './live/iss';
 import myImage from '../assets/MyIMage.jpeg';
@@ -204,6 +205,17 @@ function App() {
               {item.label}
             </a>
           ))}
+          <a href="#" className="terminal-hint" style={{ color: 'var(--violet)', borderColor: 'var(--violet)' }}>
+            ↓ resume.pdf
+          </a>
+          <button
+            type="button"
+            className="terminal-hint"
+            onClick={() => window.dispatchEvent(new Event('run-demo'))}
+            style={{ color: 'var(--primary)', borderColor: 'var(--primary)', marginLeft: '0.5rem' }}
+          >
+            ▶ run demo
+          </button>
           <button
             type="button"
             className="terminal-hint"
@@ -258,8 +270,8 @@ function App() {
                 Enter project archive
                 <ArrowDownRight size={18} />
               </a>
-              <a className="secondary-link" href="#contact">
-                Open contact relay
+              <a className="secondary-link" href="#" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                Download Resume <ArrowDownRight size={18} style={{ transform: 'rotate(-90deg)' }} />
               </a>
             </motion.div>
 
@@ -269,11 +281,18 @@ function App() {
               transition={{ delay: 0.45 }}
               className="hero-signal-grid"
             >
-              {signalCards.map((card) => (
-                <article key={card.title} className="signal-card">
+              {signalCards.map((card, index) => (
+                <motion.article 
+                  key={card.title} 
+                  className="signal-card glass-panel glow-border"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
+                >
                   <h2>{card.title}</h2>
                   <p>{card.description}</p>
-                </article>
+                </motion.article>
               ))}
             </motion.div>
           </div>
@@ -282,7 +301,7 @@ function App() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.9, delay: 0.25 }}
-            className="command-panel"
+            className="command-panel glass-panel glow-border"
           >
             <div className="command-panel__header">
               <div>
@@ -298,9 +317,8 @@ function App() {
             <div className="profile-lockup">
               <img src={myImage} alt="Shivam Sinha portrait" />
               <div>
-                <p className="mini-label">Identity</p>
-                <h3>Shivam Sinha</h3>
-                <p className="profile-note">Engineer focused on product feel, test reliability, and secure delivery.</p>
+                <p>Shivam Sinha</p>
+                <p className="mini-label">Software Engineer</p>
               </div>
             </div>
 
@@ -370,6 +388,8 @@ function App() {
             </div>
           </motion.aside>
         </section>
+
+        <TechStack />
 
         <section id="trajectory" className="section-frame">
           <div className="section-heading">

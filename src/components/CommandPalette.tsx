@@ -165,6 +165,28 @@ function CommandPalette() {
 
   const toggle = useCallback(() => setOpen((prev) => !prev), []);
 
+  const submit = useCallback((overrideCmd?: string) => {
+    const cmdStr = typeof overrideCmd === 'string' ? overrideCmd : value;
+    const { output, action } = runCommand(cmdStr);
+    if (action === 'clear') {
+      setHistory([]);
+    } else if (cmdStr.trim()) {
+      const id = ++entryIdRef.current;
+      if (output instanceof Promise) {
+        setHistory((prev) => [...prev, { id, cmd: cmdStr, output: ['[ querying live feed... ]'] }]);
+        output.then((lines) => {
+          setHistory((prev) =>
+            prev.map((entry) => (entry.id === id ? { ...entry, output: lines } : entry)),
+          );
+        });
+      } else {
+        setHistory((prev) => [...prev, { id, cmd: cmdStr, output }]);
+      }
+    }
+    if (typeof overrideCmd !== 'string') setValue('');
+    if (action === 'exit') setOpen(false);
+  }, [value]);
+
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
@@ -174,14 +196,29 @@ function CommandPalette() {
       if (event.key === 'Escape') setOpen(false);
     };
     const onOpen = () => setOpen(true);
+    
+    const onDemo = async () => {
+      setOpen(true);
+      setHistory([]);
+      const commands = ['whoami', 'skills', 'projects', 'sudo hire-me'];
+      for (const cmd of commands) {
+        await new Promise((r) => setTimeout(r, 600));
+        setValue(cmd);
+        await new Promise((r) => setTimeout(r, 500));
+        submit(cmd);
+        setValue('');
+      }
+    };
 
     window.addEventListener('keydown', onKey);
     window.addEventListener('open-terminal', onOpen);
+    window.addEventListener('run-demo', onDemo);
     return () => {
       window.removeEventListener('keydown', onKey);
       window.removeEventListener('open-terminal', onOpen);
+      window.removeEventListener('run-demo', onDemo);
     };
-  }, [toggle]);
+  }, [toggle, submit]);
 
   useEffect(() => {
     if (open) inputRef.current?.focus();
@@ -191,27 +228,6 @@ function CommandPalette() {
     const body = bodyRef.current;
     if (body) body.scrollTop = body.scrollHeight;
   }, [history, open]);
-
-  const submit = () => {
-    const { output, action } = runCommand(value);
-    if (action === 'clear') {
-      setHistory([]);
-    } else if (value.trim()) {
-      const id = ++entryIdRef.current;
-      if (output instanceof Promise) {
-        setHistory((prev) => [...prev, { id, cmd: value, output: ['[ querying live feed... ]'] }]);
-        output.then((lines) => {
-          setHistory((prev) =>
-            prev.map((entry) => (entry.id === id ? { ...entry, output: lines } : entry)),
-          );
-        });
-      } else {
-        setHistory((prev) => [...prev, { id, cmd: value, output }]);
-      }
-    }
-    setValue('');
-    if (action === 'exit') setOpen(false);
-  };
 
   return (
     <>
@@ -230,7 +246,7 @@ function CommandPalette() {
             onClick={() => setOpen(false)}
           >
             <motion.div
-              className="cmdk-panel"
+              className="cmdk-panel glass-panel glow-border"
               role="dialog"
               aria-label="Interactive terminal"
               initial={{ opacity: 0, y: 24, scale: 0.98 }}

@@ -1,11 +1,10 @@
-import { useFrame } from '@react-three/fiber';
-import { useMemo, useRef } from 'react';
+import { useFrame, useThree } from '@react-three/fiber';
+import { useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
+import { EffectComposer, Bloom } from '@react-three/postprocessing';
 
 const COUNT = 4500;
 
-// Three particle formations the field morphs between as the page scrolls:
-// hero = fibonacci sphere, mid = double helix, end = torus ring.
 function buildShapes(count: number) {
   const sphere = new Float32Array(count * 3);
   const helix = new Float32Array(count * 3);
@@ -60,6 +59,7 @@ function Scene() {
   const groupRef = useRef<THREE.Group>(null);
   const pointsRef = useRef<THREE.Points>(null);
   const telemetryRef = useRef({ frames: 0, lastEmit: 0 });
+  const { mouse, viewport } = useThree();
 
   const { shapes, positions, colors } = useMemo(() => {
     const built = buildShapes(COUNT);
@@ -86,9 +86,33 @@ function Scene() {
 
     const attr = points.geometry.attributes.position as THREE.BufferAttribute;
     const arr = attr.array as Float32Array;
+    
+    // Mouse interaction variables
+    const mx = (mouse.x * viewport.width) / 2;
+    const my = (mouse.y * viewport.height) / 2;
+    
     for (let i = 0; i < arr.length; i++) {
       const target = from[i] + (to[i] - from[i]) * mix;
-      arr[i] += (target - arr[i]) * 0.05;
+      
+      // Basic 2D mouse repulsion
+      const dx = arr[i * 3] - mx;
+      const dy = arr[i * 3 + 1] - my;
+      const distSq = dx * dx + dy * dy;
+      let repulsionX = 0;
+      let repulsionY = 0;
+      
+      if (distSq < 2.0) {
+        const force = (2.0 - distSq) * 0.1;
+        repulsionX = dx * force;
+        repulsionY = dy * force;
+      }
+      
+      // Update X
+      if (i % 3 === 0) arr[i] += (target + repulsionX - arr[i]) * 0.05;
+      // Update Y
+      else if (i % 3 === 1) arr[i] += (target + repulsionY - arr[i]) * 0.05;
+      // Update Z
+      else arr[i] += (target - arr[i]) * 0.05;
     }
     attr.needsUpdate = true;
 
@@ -96,7 +120,6 @@ function Scene() {
     group.rotation.x += (state.pointer.y * 0.22 - group.rotation.x) * 0.04;
     group.rotation.z += (state.pointer.x * -0.12 - group.rotation.z) * 0.04;
 
-    // Emit real render stats every 500ms for the EngineHud readout.
     const telemetry = telemetryRef.current;
     telemetry.frames += 1;
     const now = state.clock.elapsedTime;
@@ -118,25 +141,31 @@ function Scene() {
   });
 
   return (
-    <group ref={groupRef}>
-      <ambientLight intensity={0.5} />
-      <points ref={pointsRef}>
-        <bufferGeometry>
-          <bufferAttribute attach="attributes-position" count={COUNT} array={positions} itemSize={3} />
-          <bufferAttribute attach="attributes-color" count={COUNT} array={colors} itemSize={3} />
-        </bufferGeometry>
-        <pointsMaterial
-          size={0.032}
-          vertexColors
-          sizeAttenuation
-          transparent
-          opacity={0.85}
-          depthWrite={false}
-          blending={THREE.AdditiveBlending}
-        />
-      </points>
-    </group>
+    <>
+      <group ref={groupRef}>
+        <ambientLight intensity={0.5} />
+        <points ref={pointsRef}>
+          <bufferGeometry>
+            <bufferAttribute attach="attributes-position" count={COUNT} array={positions} itemSize={3} />
+            <bufferAttribute attach="attributes-color" count={COUNT} array={colors} itemSize={3} />
+          </bufferGeometry>
+          <pointsMaterial
+            size={0.04}
+            vertexColors
+            sizeAttenuation
+            transparent
+            opacity={0.9}
+            depthWrite={false}
+            blending={THREE.AdditiveBlending}
+          />
+        </points>
+      </group>
+      <EffectComposer disableNormalPass>
+        <Bloom luminanceThreshold={0.2} mipmapBlur intensity={1.5} />
+      </EffectComposer>
+    </>
   );
 }
 
 export default Scene;
+
